@@ -1,0 +1,24 @@
+{
+  "name": "countabletestexpenses",
+  "version": "1.0.0",
+  "description": "Technical Exam from Countable",
+  "main": "start.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ajpyoung/CountableTestExpenses.git"
+  },
+  "author": "Andrew John P. Young",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ajpyoung/CountableTestExpenses/issues"
+  },
+  "homepage": "https://github.com/ajpyoung/CountableTestExpenses#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.3",
+    "mongojs": "^2.5.0"
+  }
+}
