@@ -14,6 +14,8 @@ const conf =function(app, express){
 
 	// Parses the body on incoming requests
 	app.use(bodyParser.json());
+	// parse application/x-www-form-urlencoded
+	app.use(bodyParser.urlencoded({ extended: false }))
 
 	// Pretty prints HTML output
 	app.locals.pretty = true;

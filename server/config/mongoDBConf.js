@@ -8,8 +8,7 @@ const mongojs = require('mongojs');
 */
 const conf = function()
 {
-	var db = mongojs('expensePOCDB', ['expRec']);
-	return db;
+	global.db = mongojs('expensePOCDB', ['expRec']);
 }
 
 module.exports = {

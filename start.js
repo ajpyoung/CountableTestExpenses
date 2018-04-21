@@ -12,7 +12,7 @@ expConf.conf(app,express);
 
 //configure mongoDB
 const mongoDBConf = require('./server/config/mongoDBConf');
-global.db = mongoDBConf.conf();
+mongoDBConf.conf();
 
 //set routes
 var router = express.Router();

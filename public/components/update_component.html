@@ -1,0 +1,102 @@
+<update-component>
+	<div class="mdl-card__title mdl-card--expand mdl-color--teal-300">
+	  <h2 class="mdl-card__title-text">Latest 10 expenses</h2>	  
+	</div>
+	<div>
+		<form onsubmit={ add }>
+		  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+		    <input class="mdl-textfield__input" type="text" ref="input" onkeyup={ edit } id="expense_desc">
+		    <label class="mdl-textfield__label" for="sample3">Expense Description</label>
+		  </div>
+		  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+		    <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" ref="input" onkeyup={ edit } id="expense_val">
+		    <label class="mdl-textfield__label" for="sample4">Expense Value</label>
+		    <span class="mdl-textfield__error">Input is not a number!</span>
+		  </div>
+		  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+		    <input class="mdl-textfield__input" type="text" ref="input" onkeyup={ edit } id="expense_date">
+		    <!-- ((0[1-9]|1[012])|[1-9])+\/((0[1-9]|[1-2][0-9]|3[0-1])|([1-9]|[1-2][0-9]|3[0-1]))+\/\d{4} -->
+		    <label class="mdl-textfield__label" for="sample4">Expense Date (mm/dd/yyyy)</label>
+		    <span class="mdl-textfield__error">Date Format mm/dd/yyyy!</span>
+		  </div>
+          <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" disabled={!(this.desc&&this.val&&this.date)}>
+            Save Expense
+          </button>
+		</form>
+	</div>
+	<div class="mdl-card__supporting-text mdl-color-text--grey-600">
+	  <ul id="expese_report_list" style="margin: 10px;">
+	  	<li each={expense_record}>{date} - {description} ({amount}) </li>
+
+	  </ul>
+	</div>
+	<div class="mdl-card__actions mdl-card--border">
+	</div>
+
+	<script>
+		this.on('before-mount', function() {
+        	this.desc='';
+        	this.val='';
+        	this.date='';
+        	this.expense_record=[];
+        })
+		this.on('mount', function() {
+			//this.refreshData();
+			testData = { "description": 'Test Desc',"date": "1976-01-21T16:00:00.000Z","amount": '123' };
+			this.expense_record.push(testData);
+			//this.expense_record=[ { _id: 5adafa8f947be46de6a09d67,description: 'Test Desc',date: 1976-01-21T16:00:00.000Z,amount: '123' },{ _id: 5adafc0b947be46de6a09d68,description: 'Test Desc 2',date: 1978-02-02T16:00:00.000Z,amount: '1245' },{ _id: 5adafd30947be46de6a09d69,description: 'Test Desc 3',date: 2011-12-10T16:00:00.000Z,amount: '12222' } ];
+        });
+		add(event){
+			event.preventDefault();
+			
+			let req={
+				description:this.desc,
+				amount:this.val,
+				date:this.date //mm/dd/yyyy
+
+			};
+            $.post( "http://localhost:8080/expenses/add", req )
+            .done(function( data ) {
+				this.refreshData();
+			});//.bind(this);
+			// this.desc=this.val=this.date='';
+			// this.refs.input.forEach(function(i,v){i.value=''});
+
+		}
+		edit(event){
+			/*console.log(event);
+			console.log(event.target.id);*/
+			switch(event.target.id)
+			{
+				case 'expense_desc':
+					this.desc = event.target.value;
+					break;
+				case 'expense_val':
+					this.val = event.target.value;
+					break;
+				case 'expense_date':
+					this.date = event.target.value;
+					break;
+			}
+		}
+		var self=this
+		refreshData(){
+			let req={
+				type:"last10"
+			}
+            $.get( "http://localhost:8080/expenses/report/last10", req )
+            .done(function( data ) {
+				self.refreshView(data);
+			});//.bind(this);
+		}
+		refreshView(data){
+			this.desc=this.val=this.date='';
+			this.refs.input.forEach(function(i,v){i.value=''});
+			this.expense_record=[];
+			for(x=0;x<data.dataSet.length;x++)
+			{
+				this.expense_record.push(data.dataSet[x]);
+			}
+		}
+	</script>
+</update-component>

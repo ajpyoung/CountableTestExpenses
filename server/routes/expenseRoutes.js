@@ -68,8 +68,11 @@ const conf = async (router)=>
 		{
 			if(req.body)
 			{
-				message = await expenseRoutine.add(req.body);
-				res.json(message);
+				//message = await expenseRoutine.add(req.body);//await not working
+				//res.json(message);
+				console.log("ReqBody");
+				console.log(req.body);
+				expenseRoutine.add(req.body,res);
 			}else{
 				message = {
 					type:'error',
